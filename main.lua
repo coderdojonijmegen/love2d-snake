@@ -25,7 +25,13 @@ function love.load()
   keerPunten = {}
 
   -- hoeveel seconden de slang er over doet om een stukje te bewegen
+  tijd = 0.1
+
+  -- de teller teld tot de tijd is bereikt
   teller = 0
+
+  -- de score begint op 0
+  score = 0
 end
 
 function love.draw()
@@ -37,6 +43,7 @@ function love.draw()
   end
 
   love.graphics.setColor(255, 255, 255, 255)
+  love.graphics.print(score .. " punten")
 end
 
 function love.update()
@@ -91,6 +98,6 @@ function love.update()
     teller = 0
   end
 
-  teller = teller + 1
+  teller = teller + love.timer.getAverageDelta()
 
 end

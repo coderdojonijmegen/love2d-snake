@@ -7,25 +7,25 @@ function love.load()
   stukGrootte = 15
 
   -- beginlengte van de slang in stukjes
-  lengte = 2
+  lengte = 4
 
   -- eerste paar stukjes van de slang
   for i = 1, lengte do
     slangStukje = {
-      x = love.graphics.getWidth()/2-stukGrootte*i,
-      y = love.graphics.getHeight()/2,
+      positieX = 2*i,
+      positieY = 30,
       richtingX = 1,
       richtingY = 0
     }
     table.insert(slang, slangStukje)
   end
 
-  -- beginsnelheid van de slang
-  snelheid = 1
-
   -- het punt waar een stukje van de slang
   -- van richting moet veranderen
-  keerPunt = slang[1]
+  keerPunten = {}
+
+  -- hoeveel seconden de slang er over doet om een stukje te bewegen
+  teller = 0
 end
 
 function love.draw()
@@ -33,44 +33,64 @@ function love.draw()
 
   -- teken de slang
   for k, slangStukje in pairs(slang) do
-    love.graphics.circle("fill", slangStukje.x, slangStukje.y, stukGrootte, 16)
+    love.graphics.circle("fill", slangStukje.positieX*stukGrootte, slangStukje.positieY*stukGrootte, stukGrootte, 16)
   end
+
+  love.graphics.setColor(255, 255, 255, 255)
 end
 
 function love.update()
-  -- Verander de beweging om naar links, rechts, onder of boven te bewegen
+  -- voeg een nieuw keerpunt toe als er een knop ingedrukt is
   if love.keyboard.isDown("left") or
     love.keyboard.isDown("right") or
     love.keyboard.isDown("up") or
     love.keyboard.isDown("down") then
 
+    nieuwKeerPunt = {
+      positieX = 0,
+      positieY = 0,
+      richtingX = 0,
+      richtingY = 0
+    }
+
     if love.keyboard.isDown("left") then
-      keerPunt.richtingX = -1
-      keerPunt.richtingY = 0
+      nieuwKeerPunt.richtingX = -1
+      nieuwKeerPunt.richtingY = 0
     elseif love.keyboard.isDown("right") then
-      keerPunt.richtingX = 1
-      keerPunt.richtingY = 0
+      nieuwKeerPunt.richtingX = 1
+      nieuwKeerPunt.richtingY = 0
     elseif love.keyboard.isDown("up") then
-      keerPunt.richtingY = -1
-      keerPunt.richtingX = 0
+      nieuwKeerPunt.richtingY = -1
+      nieuwKeerPunt.richtingX = 0
     elseif love.keyboard.isDown("down") then
-      keerPunt.richtingY = 1
-      keerPunt.richtingX = 0
+      nieuwKeerPunt.richtingY = 1
+      nieuwKeerPunt.richtingX = 0
     end
 
-    keerPunt.x = slang[1].x
-    keerPunt.y = slang[1].y
+    nieuwKeerPunt.positieX = slang[#slang].positieX
+    nieuwKeerPunt.positieY = slang[#slang].positieY
+
+    -- voeg het nieuwe keerpunt toe aan de andere keerpunten
+    table.insert(keerPunten, nieuwKeerPunt)
   end
 
-  -- Verander de positie van elk stukje van de slang
-  -- als dit stukje bij het keerpunt is
-  for k, slangStukje in pairs(slang) do
-    if slangStukje.x == keerPunt.x and slangStukje.y == keerPunt.y then
-      slangStukje = keerPunt
+  if teller > tijd then
+    for k, slangStukje in pairs(slang) do
+      -- verander van richting als een stukje bij een keerpunt komt
+      for k, keerPunt in pairs(keerPunten) do
+        if slangStukje.positieX == keerPunt.positieX and slangStukje.positieY == keerPunt.positieY then
+          slangStukje.richtingX = keerPunt.richtingX
+          slangStukje.richtingY = keerPunt.richtingY
+        end
+      end
+
+      -- verander positie van elk slangstukje
+      slangStukje.positieX = slangStukje.positieX + slangStukje.richtingX
+      slangStukje.positieY = slangStukje.positieY + slangStukje.richtingY
     end
-
-    slangStukje.x = slangStukje.x + slangStukje.richtingX * snelheid
-    slangStukje.y = slangStukje.y + slangStukje.richtingY * snelheid
+    teller = 0
   end
+
+  teller = teller + 1
 
 end

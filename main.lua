@@ -1,57 +1,100 @@
 
 function love.load()
-  -- deze variabele zal straks alle stukjes bevatten
+  -- hierin worden alle stukjes van de slang bijgehouden
   slang = {}
 
-  -- grootte van een stukje
-  stukGrootte = 15
-
-  -- beginlengte van de slang in stukjes
-  lengte = 4
-
   -- eerste paar stukjes van de slang
-  for i = 1, lengte do
+  for i = 1, 2 do
     slangStukje = {
-      positieX = 2*i,
-      positieY = 30,
+      positieX = 5+1*i,
+      positieY = 5,
       richtingX = 1,
       richtingY = 0
     }
     table.insert(slang, slangStukje)
   end
+  kop = slang[#slang]
 
-  -- het punt waar een stukje van de slang
-  -- van richting moet veranderen
+  -- de punten waar een stukje van de slang van richting moet veranderen
   keerPunten = {}
 
   -- hoeveel seconden de slang er over doet om een stukje te bewegen
-  tijd = 0.1
+  tijdSlang = 1
 
-  -- de teller teld tot de tijd is bereikt
-  teller = 0
+  -- het aantal seconden dat er een stukje fruit wordt toegevoegd
+  tijdFruit = 3
+
+  -- de teller telt tot de tijd is bereikt
+  tellerSlang = 0
+  tellerFruit = 0
 
   -- de score begint op 0
   score = 0
+
+  -- hierin wordt al het fruit bijgehouden
+  fruit = {}
+
+  -- de plaatjes worden hier geladen
+  slangKopPlaatje = love.graphics.newImage("plaatjes/slangkop.png")
+  slangLichaamPlaatje = love.graphics.newImage("plaatjes/slanglichaam.png")
+  appelPlaatje = love.graphics.newImage("plaatjes/appel.png")
+  achtergrondPlaatje = love.graphics.newImage("plaatjes/achtergrond.png")
+
+  -- game over
+  gameOver = false
 end
 
 function love.draw()
-  love.graphics.setColor(120, 200, 0, 255)
+  -- teken de achtergrond
+  love.graphics.draw(achtergrondPlaatje, 0, 0)
+
+  -- teken het fruit
+  for k, stukFruit in pairs(fruit) do
+    love.graphics.draw(appelPlaatje, stukFruit.positieX*appelPlaatje:getWidth(), stukFruit.positieY*appelPlaatje:getHeight())
+  end
 
   -- teken de slang
   for k, slangStukje in pairs(slang) do
-    love.graphics.circle("fill", slangStukje.positieX*stukGrootte, slangStukje.positieY*stukGrootte, stukGrootte, 16)
+    if k == #slang then
+      love.graphics.draw(slangKopPlaatje, slangStukje.positieX*slangKopPlaatje:getWidth(), slangStukje.positieY*slangKopPlaatje:getHeight(), 0)
+    else
+      love.graphics.draw(slangLichaamPlaatje, slangStukje.positieX*slangLichaamPlaatje:getWidth(), slangStukje.positieY*slangLichaamPlaatje:getHeight())
+    end
   end
 
-  love.graphics.setColor(255, 255, 255, 255)
+  -- toon de punten op het scherm
   love.graphics.print(score .. " punten")
+
+  -- toon een bericht als je game over bent
+  if gameOver then
+    love.graphics.print("Game Over!", love.graphics.getWidth()/2, love.graphics.getHeight()/2)
+  end
 end
 
-function love.update()
+function love.update(dt)
+  if not gameOver and tellerFruit > tijdFruit then
+    plaatsFruit()
+    tellerFruit = 0
+  end
+
+  if not gameOver and tellerSlang > tijdSlang then
+    beweegSlang()
+    controleerKeerPunten()
+    eetFruit()
+    controleerGameOver()
+    tellerSlang = 0
+  end
+
+  tellerSlang = tellerSlang + dt
+  tellerFruit = tellerFruit + dt
+end
+
+function love.keypressed(key)
   -- voeg een nieuw keerpunt toe als er een knop ingedrukt is
-  if love.keyboard.isDown("left") or
-    love.keyboard.isDown("right") or
-    love.keyboard.isDown("up") or
-    love.keyboard.isDown("down") then
+  if key == "left" or
+    key == "right" or
+    key == "up" or
+    key == "down" then
 
     nieuwKeerPunt = {
       positieX = 0,
@@ -60,16 +103,16 @@ function love.update()
       richtingY = 0
     }
 
-    if love.keyboard.isDown("left") then
+    if key == "left" then
       nieuwKeerPunt.richtingX = -1
       nieuwKeerPunt.richtingY = 0
-    elseif love.keyboard.isDown("right") then
+    elseif key == "right" then
       nieuwKeerPunt.richtingX = 1
       nieuwKeerPunt.richtingY = 0
-    elseif love.keyboard.isDown("up") then
+    elseif key == "up" then
       nieuwKeerPunt.richtingY = -1
       nieuwKeerPunt.richtingX = 0
-    elseif love.keyboard.isDown("down") then
+    elseif key == "down" then
       nieuwKeerPunt.richtingY = 1
       nieuwKeerPunt.richtingX = 0
     end
@@ -78,26 +121,97 @@ function love.update()
     nieuwKeerPunt.positieY = slang[#slang].positieY
 
     -- voeg het nieuwe keerpunt toe aan de andere keerpunten
-    table.insert(keerPunten, nieuwKeerPunt)
-  end
-
-  if teller > tijd then
-    for k, slangStukje in pairs(slang) do
-      -- verander van richting als een stukje bij een keerpunt komt
-      for k, keerPunt in pairs(keerPunten) do
-        if slangStukje.positieX == keerPunt.positieX and slangStukje.positieY == keerPunt.positieY then
-          slangStukje.richtingX = keerPunt.richtingX
-          slangStukje.richtingY = keerPunt.richtingY
-        end
-      end
-
-      -- verander positie van elk slangstukje
-      slangStukje.positieX = slangStukje.positieX + slangStukje.richtingX
-      slangStukje.positieY = slangStukje.positieY + slangStukje.richtingY
+    if not bestaatKeerPunt(nieuwKeerPunt) then
+      table.insert(keerPunten, nieuwKeerPunt)
     end
-    teller = 0
+
+  end
+end
+
+function beweegSlang()
+  -- verander van richting als een stukje van de slang bij een keerpunt komt
+  for k, slangStukje in pairs(slang) do
+    for k, keerPunt in pairs(keerPunten) do
+      if slangStukje.positieX == keerPunt.positieX and slangStukje.positieY == keerPunt.positieY then
+        slangStukje.richtingX = keerPunt.richtingX
+        slangStukje.richtingY = keerPunt.richtingY
+      end
+    end
+
+    -- verander positie van elk slangstukje
+    slangStukje.positieX = slangStukje.positieX + slangStukje.richtingX
+    slangStukje.positieY = slangStukje.positieY + slangStukje.richtingY
+  end
+end
+
+function controleerKeerPunten()
+  -- verwijder het eerste keerpunt als deze niet meer gebruikt wordt door de slang
+  for kid, keerPunt in pairs(keerPunten) do
+    test = nil
+    for sid, slangStukje in pairs(slang) do
+      if slangStukje.positieX == keerPunt.positieX and slangStukje.positieY == keerPunt.positieY then
+        test = kid
+      end
+    end
+    if test == nil then
+      table.remove(keerPunten, 1)
+    end
+  end
+end
+
+function eetFruit()
+  -- als de kop van de slang op een stukje fruit zit eet het fruit en verhoog de score
+  for k, stukFruit in pairs(fruit) do
+    if stukFruit.positieX == kop.positieX and stukFruit.positieY == kop.positieY then
+      table.remove(fruit, k)
+      score = score + 1
+      tijdSlang = tijdSlang * 0.9
+      maakSlangLanger()
+    end
+  end
+end
+
+function maakSlangLanger()
+  staartStukje = slang[1]
+  nieuwSlangStukje = {
+    positieX = staartStukje.positieX-staartStukje.richtingX,
+    positieY = staartStukje.positieY-staartStukje.richtingY,
+    richtingX = staartStukje.richtingX,
+    richtingY = staartStukje.richtingY
+  }
+  table.insert(slang, 1, nieuwSlangStukje)
+end
+
+function plaatsFruit()
+  nieuwFruit = {
+    positieX = math.random(0, math.floor(love.graphics.getWidth()/appelPlaatje:getWidth())),
+    positieY = math.random(0, math.floor(love.graphics.getHeight()/appelPlaatje:getHeight()))
+  }
+  table.insert(fruit, nieuwFruit)
+end
+
+function controleerGameOver()
+  -- als de slang buiten het scherm is, is het game over
+  if kop.positieX < 0 or kop.positieX > math.floor(love.graphics.getWidth()/slangKopPlaatje:getWidth()) or
+    kop.positieY < 0 or kop.positieY > math.floor(love.graphics.getHeight()/slangKopPlaatje:getHeight()) then
+    gameOver = true
   end
 
-  teller = teller + love.timer.getAverageDelta()
+  -- als de slang tegen zichzelf botst is het ook game over
+  for k, slangStukje in pairs(slang) do
+    if slangStukje ~= kop and kop.positieX == slangStukje.positieX and kop.positieY == slangStukje.positieY then
+      gameOver = true
+    end
+  end
+end
 
+-- controleer of het keerpunt nog niet bestaat
+function bestaatKeerPunt(keerPunt)
+  bestaat = false
+  for k, kp in pairs(keerPunten) do
+    if keerPunt.positieX == kp.positieX and keerPunt.positieY == kp.positieY then
+      bestaat = true
+    end
+  end
+  return bestaat
 end

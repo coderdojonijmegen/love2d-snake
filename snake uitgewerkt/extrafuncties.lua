@@ -1,6 +1,7 @@
+local extrafuncties = {}
 
 -- controleer of het keerpunt nog niet bestaat
-function bestaatKeerPunt(keerPunten, keerPunt)
+function extrafuncties.bestaatKeerPunt(keerPunten, keerPunt)
   bestaat = false
   for k, kp in pairs(keerPunten) do
     if keerPunt.positieX == kp.positieX and keerPunt.positieY == kp.positieY then
@@ -11,7 +12,7 @@ function bestaatKeerPunt(keerPunten, keerPunt)
 end
 
 -- verwijder het eerste keerpunt als deze niet meer gebruikt wordt door de slang
-function controleerKeerPunten(keerPunten, slang)
+function extrafuncties.controleerKeerPunten(keerPunten, slang)
   for kid, keerPunt in pairs(keerPunten) do
     test = nil
     for sid, slangStukje in pairs(slang) do
@@ -24,3 +25,5 @@ function controleerKeerPunten(keerPunten, slang)
     end
   end
 end
+
+return extrafuncties

@@ -1,4 +1,4 @@
-extra = require "extra-functies"
+extra = require "extrafuncties"
 
 function love.load()
 

@@ -1,3 +1,4 @@
+extra = require "extrafuncties"
 
 function love.load()
   -- hierin worden alle stukjes van de slang bijgehouden
@@ -79,7 +80,7 @@ function love.update(dt)
 
   if not gameOver and tellerSlang > tijdSlang then
     beweegSlang()
-    controleerKeerPunten()
+    extra.controleerKeerPunten(keerPunten, slang)
     eetFruit()
     controleerGameOver()
     tellerSlang = 0
@@ -121,7 +122,7 @@ function love.keypressed(key)
     nieuwKeerPunt.positieY = slang[#slang].positieY
 
     -- voeg het nieuwe keerpunt toe aan de andere keerpunten
-    if not bestaatKeerPunt(nieuwKeerPunt) then
+    if not extra.bestaatKeerPunt(keerPunten, nieuwKeerPunt) then
       table.insert(keerPunten, nieuwKeerPunt)
     end
 
@@ -141,21 +142,6 @@ function beweegSlang()
     -- verander positie van elk slangstukje
     slangStukje.positieX = slangStukje.positieX + slangStukje.richtingX
     slangStukje.positieY = slangStukje.positieY + slangStukje.richtingY
-  end
-end
-
-function controleerKeerPunten()
-  -- verwijder het eerste keerpunt als deze niet meer gebruikt wordt door de slang
-  for kid, keerPunt in pairs(keerPunten) do
-    test = nil
-    for sid, slangStukje in pairs(slang) do
-      if slangStukje.positieX == keerPunt.positieX and slangStukje.positieY == keerPunt.positieY then
-        test = kid
-      end
-    end
-    if test == nil then
-      table.remove(keerPunten, 1)
-    end
   end
 end
 
@@ -203,15 +189,4 @@ function controleerGameOver()
       gameOver = true
     end
   end
-end
-
--- controleer of het keerpunt nog niet bestaat
-function bestaatKeerPunt(keerPunt)
-  bestaat = false
-  for k, kp in pairs(keerPunten) do
-    if keerPunt.positieX == kp.positieX and keerPunt.positieY == kp.positieY then
-      bestaat = true
-    end
-  end
-  return bestaat
 end

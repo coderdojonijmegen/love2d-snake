@@ -73,11 +73,13 @@ function love.draw()
 end
 
 function love.update(dt)
+  -- plaats fruit om de zoveel seconden
   if not gameOver and tellerFruit > tijdFruit then
     plaatsFruit()
     tellerFruit = 0
   end
 
+  -- doe de rest (bewegen van slang, controleren van keerpunten, fruit eten en game over controleren)
   if not gameOver and tellerSlang > tijdSlang then
     beweegSlang()
     extra.controleerKeerPunten(keerPunten, slang)
@@ -158,6 +160,7 @@ function eetFruit()
 end
 
 function maakSlangLanger()
+  -- voeg een stukje van de slang toe aan de rest van de slang
   staartStukje = slang[1]
   nieuwSlangStukje = {
     positieX = staartStukje.positieX-staartStukje.richtingX,
@@ -169,6 +172,7 @@ function maakSlangLanger()
 end
 
 function plaatsFruit()
+  -- plaats een stukje fruit op een willekeurige plek
   nieuwFruit = {
     positieX = math.random(0, math.floor(love.graphics.getWidth()/appelPlaatje:getWidth())),
     positieY = math.random(0, math.floor(love.graphics.getHeight()/appelPlaatje:getHeight()))

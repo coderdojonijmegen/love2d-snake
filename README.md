@@ -107,7 +107,7 @@ De eerste regel zegt eigenlijk het volgende `Als toets links is, of toets rechts
 
 Net als bij functies, wordt op de tweede regel ook het woord `end` gebruikt. Dit wordt gebruikt om aan te geven dat alleen binnen `if ...` en `end` iets zal worden uitgevoerd. Hiertussen gaan we de volgende code zetten, altijd op een nieuwe regel.
 
-## Keerpunten
+## Posities, richting en keerpunten
 Nu we weten wanneer een pijltjestoets is ingedrukt, willen we de slang een andere richting op laten gaan. Dit doen we door een aantal waarden bij te houden. We houden de positie en de richting bij.
 Dit doen we in een object. Dit object geven we dan de naam nieuwKeerPunt.
 
@@ -123,6 +123,78 @@ nieuwKeerPunt = {
 ```
 
 In nieuwKeerPunt houden we nu vier waarden bij - de `positieX`, `positieY`, `richtingX` en `richtingY`.
+
+De positieX kan elke positie zijn op de x-as. Dat is dus van de linkerkant naar rechterkant van het scherm. De positieX 0 is helemaal aan de rechterkant. De rechterkant van het scherm is 800 (de breedte van het scherm). De positieY is de positie van boven naar beneden. Hier is 0 de bovenkant van het scherm en 600 de onderkant van het scherm.
+
+De richtingX en de richtingY kan 0, -1 of 1 zijn. Als de richtingX -1 is, gaat de slang naar links. Als de richtingX 1 is gaat de slang naar rechts. En als de richtingX 0 is, gaat de slang niet naar rechts of naar links. De richtingY is precies hetzelfde maar dan voor de richting boven en beneden.
+
+Nu staan alle waarden op 0. Maar dit is tijdelijk. We gaan nu kijken welke pijltjestoets is ingedrukt om de richting te veranderen.
+
+Voeg de volgende code toe onder de code waar we het `nieuwKeerPunt` hebben toegvoegd en boven de `end` van de `if` die we hiervoor hebben toegevoegd.
+
+```
+    if key == "left" then
+      nieuwKeerPunt.richtingX = -1
+      nieuwKeerPunt.richtingY = 0
+    elseif key == "right" then
+      nieuwKeerPunt.richtingX = 1
+      nieuwKeerPunt.richtingY = 0
+    elseif key == "up" then
+      nieuwKeerPunt.richtingY = -1
+      nieuwKeerPunt.richtingX = 0
+    elseif key == "down" then
+      nieuwKeerPunt.richtingY = 1
+      nieuwKeerPunt.richtingX = 0
+    end
+```
+
+Deze code verandert nu de richting van het `nieuwKeerPunt`.
+
+Nu moeten we nog de positie van het `nieuwKeerPunt` aanpassen. Hiervoor gebruiken we de positie van de kop van de slang. Hiervoor hebben we de volgende twee regels code nodig. Voeg deze toe onder de code die je net hebt toegevoegd. Dus tussen de `end` die hoort bij de laatste `elseif` en de eerstvolgende `end`.
+
+```
+    nieuwKeerPunt.positieX = slang[#slang].positieX
+    nieuwKeerPunt.positieY = slang[#slang].positieY
+
+    if not extra.bestaatKeerPunt(keerPunten, nieuwKeerPunt) then
+      table.insert(keerPunten, nieuwKeerPunt)
+    end
+```
+
+Deze code verandert de positie van `nieuwKeerPunt` naar de positie van het laatste stukje van de slang. Daarna wordt er gecontroleerd of het nieuwKeerPunt al bestaat in het keerPunten object en hieraan toegevoegd als dat niet zo is. Nu bestaat het woord `slang` nog niet in de code, dus dat zal foutmeldingen opleveren.
+
+Hiervoor moeten we terug naar de `love.load()` functie. We kunnen dit woord (slang) niet in de `love.keypressed(key)` functie zetten omdat deze functie elke keer als er op een toets gedrukt wordt, wordt uitgevoerd. Dit zou betekenen dat het woord slang op elke toets vernieuwd wordt. Maar dat willen we niet. We willen hier alle stukjes van de slang gaan bijhouden. Dus, scroll naar boven, naar de `love.load()` functie.
+
+Voeg de volgende regel toe aan de `love.load()` functie - op een nieuwe regel onder `love.load()`.
+
+`slang = {}`
+
+Deze regel maakt een leeg object met de naam slang.
+
+In de `love.keypressed(key)` functie hebben we het nieuwKeerPunt de positie van het laatste stukje van de slang gegeven. Alleen de positie van de slang bestaat nog niet. Om deze toe te voegen. Moeten we een aantal stukjes toevoegen aan het slang object. Sla een regel over en voeg de volgende regels toe onder de vorige code.
+
+```
+  for i = 1, 2 do
+    slangStukje = {
+      positieX = 5+1*i,
+      positieY = 5,
+      richtingX = 1,
+      richtingY = 0
+    }
+    table.insert(slang, slangStukje)
+  end
+```
+
+Deze code voegt stukjes van de slang toe aan het slang object. Bovenaan zie je `for i = 1, 2 do` staan. Net als bij de `if` wordt ook `for` een `end`. Als je code tussen `for` en `end` zet, wordt deze code 2 keer uitgevoerd. Dus in dit geval worden er 2 stukjes van de slang toegevoegd aan het slang object. De laatste functie `table.insert(slang, slangStukje)` voegt het stukje toe aan het slang object.
+
+Eerder maakten we een nieuwKeerPunt aan (in de `love.keypressed(key)` functie). Ook nieuwKeerPunt wordt toegevoegd aan een object. Het verschil tussen het slang object is, dat het nieuwKeerPunt wordt toegevoegd elke keer als je een pijltjestoets indrukt. Maar ook hier missen we het object waaraan het toegevoegd moet worden, het `keerPunten` object.
+
+Daarom voegen we de volgende regel toe onder wat we zonet hebben toegevoegd:
+
+`keerPunten = {}`
+
+## Tekenen op de positie van een slangstukje
+Nu houden we de positie bij van twee slangstukjes, maar we gebruiken deze posities nog niet om hier een plaatje te tekenen.
 
 <!--
 - Beeweeg de slang met de pijltjestoetsen;

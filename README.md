@@ -80,7 +80,7 @@ We hebben nu de slangenkop geladen, maar we zien hem nog niet. Hiervoor moeten w
 
 Onder de regel `function love.draw()` typen we de volgende regel:
 
-`love.graphics.draw(slangKopPlaatje, 350, 250)`
+`love.graphics.draw(slangKopPlaatje, 100, 50)`
 
 Als we nu weer opslaan (Ctrl + S) en op de speelknop drukken zie je (als je de code goed hebt overgetypd) de kop van de slang!
 
@@ -91,11 +91,11 @@ De slang moet steeds langer worden, dus laten we daarom een stukje aan de slang 
 
 Ook hier moeten het plaatje na het laden tekenen op het scherm. Dit doen we door de volgende regel toe te voegen aan de `love.draw()` functie, onder de regel voor het tekenen van het slangKopPlaatje.
 
-`love.graphics.draw(slangLichaamPlaatje, 300, 250)`
+`love.graphics.draw(slangLichaamPlaatje, 50, 50)`
 
 Als je nu het bestand opslaat en op de speelknop drukt zie je als het goed is nu twee plaatjes van de slang.
 
-# 5. Bewegen
+# 5. Bediening en beweging
 Om de slang te kunnen bewegen is het goed om te weten wanneer de slang moet bewegen. Bijvoorbeeld wanneer de pijltjestoetsen worden ingedrukt. De code voor de bediening zetten we in de `love.keypressed(key)` functie. Deze functie wordt uitgevoerd zodra je een knop indrukt. Laten we beginnen met te controleren of er een pijltjestoets is ingedrukt. Voeg de volgende twee regels toe aan de `love.keypressed(key)` functie.
 
 ```
@@ -194,10 +194,66 @@ Daarom voegen we de volgende regel toe onder wat we zonet hebben toegevoegd:
 `keerPunten = {}`
 
 ## Tekenen op de positie van een slangstukje
-Nu houden we de positie bij van twee slangstukjes, maar we gebruiken deze posities nog niet om hier een plaatje te tekenen.
+Nu houden we de positie bij van twee slangstukjes, maar we gebruiken deze posities nog niet om hier een plaatje te tekenen. Voor het tekenen van plaatjes moeten we weer terug naar beneden scrollen, naar de `love.draw()` functie.
+
+Om de positie te gebruiken om een stukje te tekenen moeten we de twee regels die we in de `love.draw()` functie hebben gezet vervangen door de volgende code (zorg er voor dat deze code onder `love.draw()` en boven `end` staat):
+
+```
+  for k, slangStukje in pairs(slang) do
+    if k == #slang then
+      love.graphics.draw(slangKopPlaatje, slangStukje.positieX*slangKopPlaatje:getWidth(), slangStukje.positieY*slangKopPlaatje:getHeight())
+    else
+      love.graphics.draw(slangLichaamPlaatje, slangStukje.positieX*slangLichaamPlaatje:getWidth(), slangStukje.positieY*slangLichaamPlaatje:getHeight())
+    end
+  end
+```
+
+Als je de code juist hebt toegevoegd, het bestand hebt opgeslagen (Ctrl + S) en op de speelknop hebt gedrukt, zou je nu de slang ongeveer in het midden van het scherm moeten zien.
+
+## Bewegen
+Nu is het tijd om de slang daadwerkelijk te laten bewegen. Hiervoor moeten we naar de functie `love.update(dt)`. Deze functie zorgt er voor alles wordt berekend. Dus ook de beweging moet berekend worden. Voeg de volgende regels toe aan de `love.update(dt)` functie:
+
+```
+  if not gameOver and tellerSlang > tijdSlang then
+    beweegSlang()
+    extra.controleerKeerPunten(keerPunten, slang)
+    tellerSlang = 0
+  end
+  tellerSlang = tellerSlang + dt
+```
+
+Aan de `love.load()` moet je de volgende regels toevoegen. Doe dit onderaan in de `love.load()` functie, boven de `end`.
+
+```
+  tijdSlang = 1
+  tellerSlang = 0
+  gameOver = false
+```
+
+In de love.update(dt) functie mist alleen nog de beschrijving van de functie beweegSlang(). Deze moeten we zelf schrijven. Dit doen we helemaal onderaan. Op een nieuwe regel voeg je de volgende regels toe:
+
+```
+function beweegSlang()
+  for k, slangStukje in pairs(slang) do
+    for k, keerPunt in pairs(keerPunten) do
+      if slangStukje.positieX == keerPunt.positieX and slangStukje.positieY == keerPunt.positieY then
+        slangStukje.richtingX = keerPunt.richtingX
+        slangStukje.richtingY = keerPunt.richtingY
+      end
+    end
+
+    slangStukje.positieX = slangStukje.positieX + slangStukje.richtingX
+    slangStukje.positieY = slangStukje.positieY + slangStukje.richtingY
+  end
+end
+```
+
+Als je deze code opslaat en op de speelknop drukt zal de slang nu langzaam over het scherm bewegen!
+
+# 6. Mmmm, fruit
+Nu de slang kan bewegen, kunnen we hem fruit laten eten. Laten we hiervoor teruggaan naar de `love.load()` functie en een fruit object aanmaken. Dit doen we door de volgende regel toe te voegen:
 
 <!--
-- Beeweeg de slang met de pijltjestoetsen;
 - Plaats op een willekeurige plek fruit;
 - De slang moet het fruit kunnen eten;
   - Als er fruit gegeten is moet de slang sneller bewegen;

@@ -95,6 +95,17 @@ Ook hier moeten het plaatje na het laden tekenen op het scherm. Dit doen we door
 
 Als je nu het bestand opslaat en op de speelknop drukt zie je als het goed is nu twee plaatjes van de slang.
 
+## Achtergrond
+Laten we het spel ook een achtergrondje geven. Dit gaat precies op dezelfde manier als het toevoegen van het slangKopPlaatje.
+
+In de `love.load()` functie voeg je de volgende regel toe, boven het `slangKopPlaatje`:
+
+`achtergrondPlaatje = love.graphics.newImage("plaatjes/achtergrond.png")`
+
+Daarna voeg je deze regel toe aan de `love.draw()` functie, ook boven het `slangKopPlaatje`:
+
+`love.graphics.draw(achtergrondPlaatje)`
+
 # 5. Bediening en beweging
 Om de slang te kunnen bewegen is het goed om te weten wanneer de slang moet bewegen. Bijvoorbeeld wanneer de pijltjestoetsen worden ingedrukt. De code voor de bediening zetten we in de `love.keypressed(key)` functie. Deze functie wordt uitgevoerd zodra je een knop indrukt. Laten we beginnen met te controleren of er een pijltjestoets is ingedrukt. Voeg de volgende twee regels toe aan de `love.keypressed(key)` functie.
 
@@ -382,8 +393,8 @@ En tot slot voegen we de volgende regels toe aan het einde van de `love.draw()` 
 ```
 
 # Goed gedaan!
-En dat is het, je hebt het spel Snake gebouwd!
+En dat is het, je hebt het spel Snake gebouwd! Hoe lang hou jij het vol en wat is de hoogste score die je kunt krijgen?
 
 Heb je iets niet goed begrepen, vraag het dan aan &eacute;&eacute;n van de mentoren, we helpen je natuurlijk graag!
 
-Je kunt ook altijd een kijkje nemen bij de andere kinderen, misschien kan je helpen!
+Je kunt ook altijd een kijkje nemen bij de andere kinderen, misschien kan jij hun helpen!

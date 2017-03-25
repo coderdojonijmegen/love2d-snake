@@ -183,9 +183,10 @@ In de `love.keypressed(key)` functie hebben we het nieuwKeerPunt de positie van 
     }
     table.insert(slang, slangStukje)
   end
+  kop = slang[#slang]
 ```
 
-Deze code voegt stukjes van de slang toe aan het slang object. Bovenaan zie je `for i = 1, 2 do` staan. Net als bij de `if` wordt ook `for` een `end`. Als je code tussen `for` en `end` zet, wordt deze code 2 keer uitgevoerd. Dus in dit geval worden er 2 stukjes van de slang toegevoegd aan het slang object. De laatste functie `table.insert(slang, slangStukje)` voegt het stukje toe aan het slang object.
+Deze code voegt stukjes van de slang toe aan het slang object. Bovenaan zie je `for i = 1, 2 do` staan. Net als bij de `if` wordt ook `for` een `end`. Als je code tussen `for` en `end` zet, wordt deze code 2 keer uitgevoerd. Dus in dit geval worden er 2 stukjes van de slang toegevoegd aan het slang object. De laatste functie `table.insert(slang, slangStukje)` voegt het stukje toe aan het slang object. En de laatste regel geeft aan waar de kop van de slang zit (het laatste stukje).
 
 Eerder maakten we een nieuwKeerPunt aan (in de `love.keypressed(key)` functie). Ook nieuwKeerPunt wordt toegevoegd aan een object. Het verschil tussen het slang object is, dat het nieuwKeerPunt wordt toegevoegd elke keer als je een pijltjestoets indrukt. Maar ook hier missen we het object waaraan het toegevoegd moet worden, het `keerPunten` object.
 
@@ -250,15 +251,139 @@ end
 
 Als je deze code opslaat en op de speelknop drukt zal de slang nu langzaam over het scherm bewegen!
 
-# 6. Mmmm, fruit
-Nu de slang kan bewegen, kunnen we hem fruit laten eten. Laten we hiervoor teruggaan naar de `love.load()` functie en een fruit object aanmaken. Dit doen we door de volgende regel toe te voegen:
+# 6. Fruit
 
-<!--
-- Plaats op een willekeurige plek fruit;
-- De slang moet het fruit kunnen eten;
-  - Als er fruit gegeten is moet de slang sneller bewegen;
-  - Als er fruit gegeten is moet de slang langer worden;
-  - Als er fruit gegeten is krijg je een punt;
-- Als de slang tegen zichzelf botst is het game over;
-- Ook als de slang buiten het scherm gaat is het game over;
--->
+## Fruit plaatsen
+Nu de slang kan bewegen, kunnen we hem fruit laten eten. Laten we hiervoor teruggaan naar de `love.load()` functie en een fruit object aanmaken. Dit doen we door de volgende regels toe te voegen, waar je wilt, in de `love.load()` functie:
+
+```
+fruit = {}
+tellerFruit = 0
+tijdFruit = 3
+appelPlaatje = love.graphics.newImage("plaatjes/appel.png")
+```
+
+Nu we alle waarden en het plaatje hebben geladen moeten we ergens het `fruit` object vullen met fruit. Dit doen we in de `love.update(dt)` functie.
+
+```
+  if not gameOver and tellerFruit > tijdFruit then
+    plaatsFruit()
+    tellerFruit = 0
+  end
+  tellerFruit = tellerFruit + dt
+```
+
+Nu hoeven we alleen nog de missende, `plaatsFruit()` functie maken. Net als bij de `beweegSlang()` functie, plaatsen we de `plaatsFruit()` functie helemaal onderaan. Voeg deze code toe:
+
+```
+function plaatsFruit()
+  nieuwFruit = {
+    positieX = math.random(0, math.floor(love.graphics.getWidth()/appelPlaatje:getWidth())),
+    positieY = math.random(0, math.floor(love.graphics.getHeight()/appelPlaatje:getHeight()))
+  }
+  table.insert(fruit, nieuwFruit)
+end
+```
+
+Deze functie voegt op een willekeurige plaats een stuk fruit toe. We zien alleen het fruit nog niet op het scherm verschijnen. Hiervoor moeten we terug naar de `love.draw()` functie. De volgorde van je code in de `love.draw()` functie bepaald wat er eerst getekend moet worden. Dus als we de appels onder de slang willen tekenen, moeten we de volgende code, boven de code van de slang plaatsen (binnen de `love.draw()` functie):
+
+```
+  for k, stukFruit in pairs(fruit) do
+    love.graphics.draw(appelPlaatje, stukFruit.positieX*appelPlaatje:getWidth(), stukFruit.positieY*appelPlaatje:getHeight())
+  end
+```
+
+Als nu opslaan en op de speelknop drukken, zien we nu appels verschijnen op het scherm. Omdat `tijdFruit` 3 is, wordt er elke 3 seconden een appel toegevoegd.
+
+## Fruit eten
+Als we nu met de slang over een stukje fruit bewegen, gebeurd er niets. Maar we willen dus het fruit opeten. Hiervoor moeten we weer zelf een functie schrijven, de functie `eetFruit()`. Voeg deze code toe, helemaal onderaan:
+
+```
+function eetFruit()
+  for k, stukFruit in pairs(fruit) do
+    if stukFruit.positieX == kop.positieX and stukFruit.positieY == kop.positieY then
+      table.remove(fruit, k)
+      score = score + 1
+      tijdSlang = tijdSlang * 0.9
+      maakSlangLanger()
+    end
+  end
+end
+```
+
+Voeg daarna de volgende regel toe, na `extra.controleerKeerPunten(keerPunten, slang)`, in de `love.update(dt)` functie:
+
+`eetFruit()`
+
+Als de `eetFruit()` functie wordt uitgevoerd, gebeuren er een aantal dingen:
+- Het fruit wordt verwijderd - `table.remove(fruit, k)`
+- Je krijgt een score - `score = score + 1`
+- De slang gaat sneller bewegen - `tijdSlang = tijdSlang * 0.9`
+- En de slang wordt langer - `maakSlangLanger()`
+
+De laatste functie ontbreekt nog, de `maakSlangLanger()` functie. Voeg deze toe, ook helemaal onderaan:
+
+```
+function maakSlangLanger()
+  staartStukje = slang[1]
+  nieuwSlangStukje = {
+    positieX = staartStukje.positieX-staartStukje.richtingX,
+    positieY = staartStukje.positieY-staartStukje.richtingY,
+    richtingX = staartStukje.richtingX,
+    richtingY = staartStukje.richtingY
+  }
+  table.insert(slang, 1, nieuwSlangStukje)
+end
+```
+
+Deze code voegt een stukje van de slang toe, waar de staart is. Dit stukje wordt dan toegevoegd aan het `slang` object, waar zich ook alle andere stukjes bevinden.
+
+# 7. Score
+Als we nu onze code zouden uitvoeren, zouden we een foutmelding krijgen omdat het score object nog niet bestaat. Deze moeten we nog toevoegen aan de `love.load()` functie. Dus voeg de volgende regel toe aan je `love.load()` functie, op een nieuwe regel:
+
+`score = 0`
+
+En om de score op het scherm te tonen, voegen we de volgende regel toe aan de `love.draw()` functie:
+
+`love.graphics.print(score .. " punten")`
+
+Als we nu de code opslaan en op de speelknop drukken, zal de slang steeds langer worden en sneller gaan zodra je meer appels eet.
+
+# 8. Game Over
+Het spel mist nu alleen nog twee spelregels. Je moet game over gaan als de slang tegen zichzelf botst of buiten het scherm gaat.
+
+Om dit te controleren maken we nog &eacute;&eacute;n functie. Voeg deze code toe, helemaal onderaan:
+
+```
+function controleerGameOver()
+  if kop.positieX < 0 or kop.positieX > math.floor(love.graphics.getWidth()/slangKopPlaatje:getWidth()) or
+    kop.positieY < 0 or kop.positieY > math.floor(love.graphics.getHeight()/slangKopPlaatje:getHeight()) then
+    gameOver = true
+  end
+
+  for k, slangStukje in pairs(slang) do
+    if slangStukje ~= kop and kop.positieX == slangStukje.positieX and kop.positieY == slangStukje.positieY then
+      gameOver = true
+    end
+  end
+end
+```
+
+Voeg daarna de volgende regel toe na `eetFruit()` in de `love.update(dt)` functie:
+
+`controleerGameOver()`
+
+En tot slot voegen we de volgende regels toe aan het einde van de `love.draw()` functie om een bericht te tonen dat je game over bent:
+
+```
+  if gameOver then
+    love.graphics.print("Game Over!", love.graphics.getWidth()/2, love.graphics.getHeight()/2)
+  end
+```
+
+# Goed gedaan!
+En dat is het, je hebt het spel Snake gebouwd!
+
+Heb je iets niet goed begrepen, vraag het dan aan &eacute;&eacute;n van de mentoren, we helpen je natuurlijk graag!
+
+Je kunt ook altijd een kijkje nemen bij de andere kinderen, misschien kan je helpen!

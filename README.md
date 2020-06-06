@@ -1,8 +1,14 @@
 # Snake in Love2D
 
+# 0. Voorbereiding
+
+1. Download en installeer LÖVE: https://love2d.org
+2. Download en installeerVisual Studio Code: https://code.visualstudio.com/download
+
+
 # 1. Introductie
 
-Vandaag gaan we aan de slag met het spel Snake. Begin met het downloaden van het [materiaal](love2d-snake.zip) en pak daarna de bestanden uit. Open daarna het programma Atom en sleep het mapje met de uitgepakte bestanden op Atom. Als het goed is zie je nu aan de linkerkant een lijstje met alle bestanden. Met deze bestanden gaan we straks aan de slag. Maar laten we eerst kijken naar de spelregels.
+Vandaag gaan we aan de slag met het spel Snake. Begin met het downloaden van het [materiaal](love2d-snake.zip) en pak daarna de bestanden uit. Open daarna Visual Studio Code en sleep het mapje met de uitgepakte bestanden in het scherm van Visual Studio Code. Als het goed is zie je nu aan de linkerkant een lijstje met alle bestanden. Met deze bestanden gaan we straks aan de slag. Maar laten we eerst kijken naar de spelregels.
 
 ## Spelregels
 Het doel van het spel Snake is om zoveel mogelijk fruit te eten (dit is je score).  Hoe meer je eet, hoe langer de slang wordt en ook beweegt de slang sneller. Als de slang tegen zichzelf botst of buiten het scherm gaat is het game over.
@@ -74,7 +80,18 @@ end
 
 Als je goed kijkt zie je in het voorbeeld hierboven dat de regel iets verder staat dan alle andere tekst. Dit noemen we _inspringen_. Als programmeur gebruik je dit om je code beter leesbaar te maken. Je kunt dit zelf doen door je tekstcursor aan het begin van de regel te plaatsen en dan op de toets `Tab` te drukken.
 
-Als we nu opslaan (Ctrl + S) en op de speelknop drukken (de knop met het driehoekje), krijgen we als het goed is een zwart scherm. Krijg je een blauw scherm? Dan heb je een foutje in je code zitten.
+Sla het programma nu op (Ctrl/Cmd + S).
+Als je op Windows werkt doe je nu het volgende:
+* open een opdrachtprompt door "cmd" in te typen in het startmenu.
+* voer het volgende commando uit: "c:\Program Files\LOVE\love.exe" "c:\<de_map_waar_jouw_programma_staat>\love\snake"
+
+Als je op een Mac werkt:
+* Start LÖVE
+* sleep de map met je Lua-programma op het LÖVE-scherm.
+
+Deze stap doe je vanaf nu elke keer als je iets hebt verandert aan je programma en je wilt kijken wat er is veranderd.
+
+Als je een blauw scherm met een "Error" krijgt dan klopt er iets niet aan je code, controleer die nog een keer.
 
 We hebben nu de slangenkop geladen, maar we zien hem nog niet. Hiervoor moeten we naar de `love.draw()` functie.
 
@@ -82,7 +99,7 @@ Onder de regel `function love.draw()` typen we de volgende regel:
 
 `love.graphics.draw(slangKopPlaatje, 100, 50)`
 
-Als we nu weer opslaan (Ctrl + S) en op de speelknop drukken zie je (als je de code goed hebt overgetypd) de kop van de slang!
+Als we nu weer opslaan (Ctrl + S) en opnieuw laden zie je (als je de code goed hebt overgetypd) de kop van de slang!
 
 # 4. De rest van de slang
 De slang moet steeds langer worden, dus laten we daarom een stukje aan de slang toevoegen. Ook hier hebben we een plaatje voor nodig. Voeg de volgende regel toe aan de `love.load()` functie, onder de regel voor het slangKopPlaatje.
@@ -93,7 +110,7 @@ Ook hier moeten het plaatje na het laden tekenen op het scherm. Dit doen we door
 
 `love.graphics.draw(slangLichaamPlaatje, 50, 50)`
 
-Als je nu het bestand opslaat en op de speelknop drukt zie je als het goed is nu twee plaatjes van de slang.
+Als je nu het bestand opslaat en opnieuw laden zie je als het goed is nu twee plaatjes van de slang.
 
 ## Achtergrond
 Laten we het spel ook een achtergrondje geven. Dit gaat precies op dezelfde manier als het toevoegen van het slangKopPlaatje.
@@ -220,7 +237,7 @@ Om de positie te gebruiken om een stukje te tekenen moeten we de twee regels die
   end
 ```
 
-Als je de code juist hebt toegevoegd, het bestand hebt opgeslagen (Ctrl + S) en op de speelknop hebt gedrukt, zou je nu de slang ongeveer in het midden van het scherm moeten zien.
+Als je de code juist hebt toegevoegd, het bestand hebt opgeslagen (Ctrl + S) en opnieuw hebt geladen, zou je nu de slang ongeveer in het midden van het scherm moeten zien.
 
 ## Bewegen
 Nu is het tijd om de slang daadwerkelijk te laten bewegen. Hiervoor moeten we naar de functie `love.update(dt)`. Deze functie zorgt er voor alles wordt berekend. Dus ook de beweging moet berekend worden. Voeg de volgende regels toe aan de `love.update(dt)` functie:
@@ -260,7 +277,7 @@ function beweegSlang()
 end
 ```
 
-Als je deze code opslaat en op de speelknop drukt zal de slang nu langzaam over het scherm bewegen!
+Als je deze code opslaat en het programma opnieuw laadt zal de slang nu langzaam over het scherm bewegen!
 
 # 6. Fruit
 
@@ -304,7 +321,7 @@ Deze functie voegt op een willekeurige plaats een stuk fruit toe. We zien alleen
   end
 ```
 
-Als nu opslaan en op de speelknop drukken, zien we nu appels verschijnen op het scherm. Omdat `tijdFruit` 3 is, wordt er elke 3 seconden een appel toegevoegd.
+Als nu opslaan en het programma opnieuw laden, zien we nu appels verschijnen op het scherm. Omdat `tijdFruit` 3 is, wordt er elke 3 seconden een appel toegevoegd.
 
 ## Fruit eten
 Als we nu met de slang over een stukje fruit bewegen, gebeurd er niets. Maar we willen dus het fruit opeten. Hiervoor moeten we weer zelf een functie schrijven, de functie `eetFruit()`. Voeg deze code toe, helemaal onderaan:
@@ -358,7 +375,7 @@ En om de score op het scherm te tonen, voegen we de volgende regel toe aan de `l
 
 `love.graphics.print(score .. " punten")`
 
-Als we nu de code opslaan en op de speelknop drukken, zal de slang steeds langer worden en sneller gaan zodra je meer appels eet.
+Als we nu de code opslaan en opnieuw laden, zal de slang steeds langer worden en sneller gaan zodra je meer appels eet.
 
 # 8. Game Over
 Het spel mist nu alleen nog twee spelregels. Je moet game over gaan als de slang tegen zichzelf botst of buiten het scherm gaat.

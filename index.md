@@ -1,9 +1,18 @@
-# Snake in Love2D
+---
+title: "Snake in Löve2D"
+headercolor: "teal-background"
+date: 2020-02-06T21:15:23+01:00
+draft: false
+---
+
+We gaan met 2D game framework Löve2D het klassieke spel [Snake](https://nl.wikipedia.org/wiki/Snake_(computerspel)) bouwen.
+
+<!--more-->
 
 # 0. Voorbereiding
 
 1. Download en installeer LÖVE: https://love2d.org
-2. Download en installeerVisual Studio Code: https://code.visualstudio.com/download
+2. Download en installeer Visual Studio Code: https://code.visualstudio.com/download
 
 
 # 1. Introductie

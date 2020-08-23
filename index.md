@@ -1,9 +1,18 @@
-# Snake in Love2D
+---
+title: "Snake met Löve2D"
+headercolor: "teal-background"
+date: 2020-02-06T21:15:23+01:00
+draft: false
+---
+
+We gaan met 2D game framework Löve2D het klassieke spel [Snake](https://nl.wikipedia.org/wiki/Snake_(computerspel)) bouwen.
+
+<!--more-->
 
 # 0. Voorbereiding
 
 1. Download en installeer LÖVE: https://love2d.org
-2. Download en installeerVisual Studio Code: https://code.visualstudio.com/download
+2. Download en installeer Visual Studio Code: https://code.visualstudio.com/download
 
 
 # 1. Introductie
@@ -52,6 +61,8 @@ De zogenaamde `function`s (in het Nederlands functie(-s)) die je hier ziet worde
 
 # 3. Slangenkop
 
+![Slangenkop](plaatjes/slangkop.png)
+
 Dus als we bijvoorbeeld de kop van de slang willen laden, typen we de volgende regel tussen `function love.load()` en de eerstvolgende `end`.
 
 `slangKopPlaatje = love.graphics.newImage("plaatjes/slangkop.png")`
@@ -89,7 +100,7 @@ Als je op een Mac werkt:
 * Start LÖVE
 * sleep de map met je Lua-programma op het LÖVE-scherm.
 
-Deze stap doe je vanaf nu elke keer als je iets hebt verandert aan je programma en je wilt kijken wat er is veranderd.
+Deze stap doe je vanaf nu elke keer als je iets hebt veranderd aan je programma en je wilt kijken wat er is veranderd.
 
 Als je een blauw scherm met een "Error" krijgt dan klopt er iets niet aan je code, controleer die nog een keer.
 
@@ -102,6 +113,9 @@ Onder de regel `function love.draw()` typen we de volgende regel:
 Als we nu weer opslaan (Ctrl + S) en opnieuw laden zie je (als je de code goed hebt overgetypd) de kop van de slang!
 
 # 4. De rest van de slang
+
+![Slangen lichaam](plaatjes/slanglichaam.png)
+
 De slang moet steeds langer worden, dus laten we daarom een stukje aan de slang toevoegen. Ook hier hebben we een plaatje voor nodig. Voeg de volgende regel toe aan de `love.load()` functie, onder de regel voor het slangKopPlaatje.
 
 `slangLichaamPlaatje = love.graphics.newImage("plaatjes/slanglichaam.png")`
@@ -113,6 +127,9 @@ Ook hier moeten het plaatje na het laden tekenen op het scherm. Dit doen we door
 Als je nu het bestand opslaat en opnieuw laden zie je als het goed is nu twee plaatjes van de slang.
 
 ## Achtergrond
+
+![Achtergrond](plaatjes/achtergrond.png)
+
 Laten we het spel ook een achtergrondje geven. Dit gaat precies op dezelfde manier als het toevoegen van het slangKopPlaatje.
 
 In de `love.load()` functie voeg je de volgende regel toe, boven het `slangKopPlaatje`:
@@ -282,6 +299,9 @@ Als je deze code opslaat en het programma opnieuw laadt zal de slang nu langzaam
 # 6. Fruit
 
 ## Fruit plaatsen
+
+![Appel](plaatjes/appel.png)
+
 Nu de slang kan bewegen, kunnen we hem fruit laten eten. Laten we hiervoor teruggaan naar de `love.load()` functie en een fruit object aanmaken. Dit doen we door de volgende regels toe te voegen, waar je wilt, in de `love.load()` functie:
 
 ```
@@ -415,3 +435,5 @@ En dat is het, je hebt het spel Snake gebouwd! Hoe lang hou jij het vol en wat i
 Heb je iets niet goed begrepen, vraag het dan aan &eacute;&eacute;n van de mentoren, we helpen je natuurlijk graag!
 
 Je kunt ook altijd een kijkje nemen bij de andere kinderen, misschien kan jij hun helpen!
+
+{{< licentie rel="http://creativecommons.org/licenses/by-nc-sa/4.0/">}}

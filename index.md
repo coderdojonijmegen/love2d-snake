@@ -435,3 +435,5 @@ En dat is het, je hebt het spel Snake gebouwd! Hoe lang hou jij het vol en wat i
 Heb je iets niet goed begrepen, vraag het dan aan &eacute;&eacute;n van de mentoren, we helpen je natuurlijk graag!
 
 Je kunt ook altijd een kijkje nemen bij de andere kinderen, misschien kan jij hun helpen!
+
+{{< licentie rel="http://creativecommons.org/licenses/by-nc-sa/4.0/">}}

@@ -1,7 +1,8 @@
 ---
-title: "Snake met Löve2D"
+title: "Löve2D - Snake"
 headercolor: "teal-background"
 date: 2020-02-06T21:15:23+01:00
+toc: true
 draft: false
 ---
 
@@ -9,17 +10,17 @@ We gaan met 2D game framework Löve2D het klassieke spel [Snake](https://nl.wiki
 
 <!--more-->
 
-# 0. Voorbereiding
+## 0. Voorbereiding
 
 1. Download en installeer LÖVE: https://love2d.org
 2. Download en installeer Visual Studio Code: https://code.visualstudio.com/download
 
 
-# 1. Introductie
+## 1. Introductie
 
 Vandaag gaan we aan de slag met het spel Snake. Begin met het downloaden van het [materiaal](love2d-snake.zip) en pak daarna de bestanden uit. Open daarna Visual Studio Code en sleep het mapje met de uitgepakte bestanden in het scherm van Visual Studio Code. Als het goed is zie je nu aan de linkerkant een lijstje met alle bestanden. Met deze bestanden gaan we straks aan de slag. Maar laten we eerst kijken naar de spelregels.
 
-## Spelregels
+### Spelregels
 Het doel van het spel Snake is om zoveel mogelijk fruit te eten (dit is je score).  Hoe meer je eet, hoe langer de slang wordt en ook beweegt de slang sneller. Als de slang tegen zichzelf botst of buiten het scherm gaat is het game over.
 
 Dus om Snake te bouwen moet het spel het volgende doen:
@@ -34,7 +35,7 @@ Dus om Snake te bouwen moet het spel het volgende doen:
 
 Nu we de spelregels duidelijk hebben en weten wat het spel moet gaan doen, is het tijd om Snake te gaan bouwen!
 
-# 2. Aan de slag!
+## 2. Aan de slag!
 We beginnen door het `main.lua` bestand te openen. Klik hierop in de lijst die je aan de linkerkant ziet. Als je het juiste bestand hebt geopend zie je de volgende code:
 
 ```
@@ -59,7 +60,7 @@ end
 
 De zogenaamde `function`s (in het Nederlands functie(-s)) die je hier ziet worden uitgevoerd zodra zij nodig zijn. Zo is er een functie die `love.load()` heet, waarbinnen we de code zetten om bijvoorbeeld onze plaatjes te laden.
 
-# 3. Slangenkop
+## 3. Slangenkop
 
 ![Slangenkop](plaatjes/slangkop.png)
 
@@ -112,7 +113,7 @@ Onder de regel `function love.draw()` typen we de volgende regel:
 
 Als we nu weer opslaan (Ctrl + S) en opnieuw laden zie je (als je de code goed hebt overgetypd) de kop van de slang!
 
-# 4. De rest van de slang
+## 4. De rest van de slang
 
 ![Slangen lichaam](plaatjes/slanglichaam.png)
 
@@ -126,7 +127,7 @@ Ook hier moeten het plaatje na het laden tekenen op het scherm. Dit doen we door
 
 Als je nu het bestand opslaat en opnieuw laden zie je als het goed is nu twee plaatjes van de slang.
 
-## Achtergrond
+### Achtergrond
 
 ![Achtergrond](plaatjes/achtergrond.png)
 
@@ -140,7 +141,7 @@ Daarna voeg je deze regel toe aan de `love.draw()` functie, ook boven het `slang
 
 `love.graphics.draw(achtergrondPlaatje)`
 
-# 5. Bediening en beweging
+## 5. Bediening en beweging
 Om de slang te kunnen bewegen is het goed om te weten wanneer de slang moet bewegen. Bijvoorbeeld wanneer de pijltjestoetsen worden ingedrukt. De code voor de bediening zetten we in de `love.keypressed(key)` functie. Deze functie wordt uitgevoerd zodra je een knop indrukt. Laten we beginnen met te controleren of er een pijltjestoets is ingedrukt. Voeg de volgende twee regels toe aan de `love.keypressed(key)` functie.
 
 ```
@@ -152,7 +153,7 @@ De eerste regel zegt eigenlijk het volgende `Als toets links is, of toets rechts
 
 Net als bij functies, wordt op de tweede regel ook het woord `end` gebruikt. Dit wordt gebruikt om aan te geven dat alleen binnen `if ...` en `end` iets zal worden uitgevoerd. Hiertussen gaan we de volgende code zetten, altijd op een nieuwe regel.
 
-## Posities, richting en keerpunten
+### Posities, richting en keerpunten
 Nu we weten wanneer een pijltjestoets is ingedrukt, willen we de slang een andere richting op laten gaan. Dit doen we door een aantal waarden bij te houden. We houden de positie en de richting bij.
 Dit doen we in een object. Dit object geven we dan de naam nieuwKeerPunt.
 
@@ -239,7 +240,7 @@ Daarom voegen we de volgende regel toe onder wat we zonet hebben toegevoegd:
 
 `keerPunten = {}`
 
-## Tekenen op de positie van een slangstukje
+### Tekenen op de positie van een slangstukje
 Nu houden we de positie bij van twee slangstukjes, maar we gebruiken deze posities nog niet om hier een plaatje te tekenen. Voor het tekenen van plaatjes moeten we weer terug naar beneden scrollen, naar de `love.draw()` functie.
 
 Om de positie te gebruiken om een stukje te tekenen moeten we de twee regels die we in de `love.draw()` functie hebben gezet vervangen door de volgende code (zorg er voor dat deze code onder `love.draw()` en boven `end` staat):
@@ -256,7 +257,7 @@ Om de positie te gebruiken om een stukje te tekenen moeten we de twee regels die
 
 Als je de code juist hebt toegevoegd, het bestand hebt opgeslagen (Ctrl + S) en opnieuw hebt geladen, zou je nu de slang ongeveer in het midden van het scherm moeten zien.
 
-## Bewegen
+### Bewegen
 Nu is het tijd om de slang daadwerkelijk te laten bewegen. Hiervoor moeten we naar de functie `love.update(dt)`. Deze functie zorgt er voor alles wordt berekend. Dus ook de beweging moet berekend worden. Voeg de volgende regels toe aan de `love.update(dt)` functie:
 
 ```
@@ -296,9 +297,9 @@ end
 
 Als je deze code opslaat en het programma opnieuw laadt zal de slang nu langzaam over het scherm bewegen!
 
-# 6. Fruit
+## 6. Fruit
 
-## Fruit plaatsen
+### Fruit plaatsen
 
 ![Appel](plaatjes/appel.png)
 
@@ -343,7 +344,7 @@ Deze functie voegt op een willekeurige plaats een stuk fruit toe. We zien alleen
 
 Als nu opslaan en het programma opnieuw laden, zien we nu appels verschijnen op het scherm. Omdat `tijdFruit` 3 is, wordt er elke 3 seconden een appel toegevoegd.
 
-## Fruit eten
+### Fruit eten
 Als we nu met de slang over een stukje fruit bewegen, gebeurd er niets. Maar we willen dus het fruit opeten. Hiervoor moeten we weer zelf een functie schrijven, de functie `eetFruit()`. Voeg deze code toe, helemaal onderaan:
 
 ```
@@ -386,7 +387,7 @@ end
 
 Deze code voegt een stukje van de slang toe, waar de staart is. Dit stukje wordt dan toegevoegd aan het `slang` object, waar zich ook alle andere stukjes bevinden.
 
-# 7. Score
+## 7. Score
 Als we nu onze code zouden uitvoeren, zouden we een foutmelding krijgen omdat het score object nog niet bestaat. Deze moeten we nog toevoegen aan de `love.load()` functie. Dus voeg de volgende regel toe aan je `love.load()` functie, op een nieuwe regel:
 
 `score = 0`
@@ -397,7 +398,7 @@ En om de score op het scherm te tonen, voegen we de volgende regel toe aan de `l
 
 Als we nu de code opslaan en opnieuw laden, zal de slang steeds langer worden en sneller gaan zodra je meer appels eet.
 
-# 8. Game Over
+## 8. Game Over
 Het spel mist nu alleen nog twee spelregels. Je moet game over gaan als de slang tegen zichzelf botst of buiten het scherm gaat.
 
 Om dit te controleren maken we nog &eacute;&eacute;n functie. Voeg deze code toe, helemaal onderaan:
@@ -429,7 +430,7 @@ En tot slot voegen we de volgende regels toe aan het einde van de `love.draw()` 
   end
 ```
 
-# Goed gedaan!
+## Goed gedaan!
 En dat is het, je hebt het spel Snake gebouwd! Hoe lang hou jij het vol en wat is de hoogste score die je kunt krijgen?
 
 Heb je iets niet goed begrepen, vraag het dan aan &eacute;&eacute;n van de mentoren, we helpen je natuurlijk graag!

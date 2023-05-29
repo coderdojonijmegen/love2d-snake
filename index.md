@@ -4,7 +4,7 @@ headercolor: "teal-background"
 date: 2020-02-06T21:15:23+01:00
 toc: true
 draft: false
-taal: Löve2D
+onderwerp: Löve2D
 ---
 
 We gaan met 2D game framework Löve2D het klassieke spel [Snake](https://nl.wikipedia.org/wiki/Snake_(computerspel)) bouwen.

@@ -13,7 +13,7 @@ We gaan met 2D game framework Löve2D het klassieke spel [Snake](https://nl.wiki
 
 ## 0. Voorbereiding
 
-1. Download en installeer LÖVE: https://love2d.org
+1. Download en installeer LÖVE: https://love2d.org; voor meer informatie, zie [/instructies/love2d-shooter/#installatie-löve](/instructies/love2d-shooter/#installatie-löve).
 2. Download en installeer Visual Studio Code: https://code.visualstudio.com/download
 
 
@@ -25,13 +25,13 @@ Vandaag gaan we aan de slag met het spel Snake. Begin met het downloaden van het
 Het doel van het spel Snake is om zoveel mogelijk fruit te eten (dit is je score).  Hoe meer je eet, hoe langer de slang wordt en ook beweegt de slang sneller. Als de slang tegen zichzelf botst of buiten het scherm gaat is het game over.
 
 Dus om Snake te bouwen moet het spel het volgende doen:
-- Beeweeg de slang met de pijltjestoetsen;
+- Beweeg de slang met de pijltjestoetsen;
 - Plaats op een willekeurige plek fruit;
 - De slang moet het fruit kunnen eten;
   - Als er fruit gegeten is moet de slang sneller bewegen;
   - Als er fruit gegeten is moet de slang langer worden;
   - Als er fruit gegeten is krijg je een punt;
-- Als de slang tegen zichzelf botst is het game over;
+- Als de slang tegen zichzelf botst, is het game over;
 - Ook als de slang buiten het scherm gaat is het game over;
 
 Nu we de spelregels duidelijk hebben en weten wat het spel moet gaan doen, is het tijd om Snake te gaan bouwen!
@@ -91,7 +91,7 @@ function love.keypressed(key)
 end
 ```
 
-Als je goed kijkt zie je in het voorbeeld hierboven dat de regel iets verder staat dan alle andere tekst. Dit noemen we _inspringen_. Als programmeur gebruik je dit om je code beter leesbaar te maken. Je kunt dit zelf doen door je tekstcursor aan het begin van de regel te plaatsen en dan op de toets `Tab` te drukken.
+Als je goed kijkt, zie je in het voorbeeld hierboven dat de regel iets verder staat dan alle andere tekst. Dit noemen we _inspringen_. Als programmeur gebruik je dit om je code beter leesbaar te maken. Je kunt dit zelf doen door je tekstcursor aan het begin van de regel te plaatsen en dan op de toets `Tab` te drukken.
 
 Sla het programma nu op (Ctrl/Cmd + S).
 Als je op Windows werkt doe je nu het volgende:
